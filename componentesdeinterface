@@ -1,0 +1,250 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(
+    initialRoute: '/',
+    routes: {
+      '/': (context) => LoginScreen(),
+      '/signup': (context) => SignUpScreen(),
+    },
+  ));
+}
+
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool passwordVisible = false;
+  bool isRememberMe = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(10),
+        child: ListView(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Email',
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                controller: passwordController,
+                obscureText: !this.passwordVisible,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Senha',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        passwordVisible = !passwordVisible;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue, // background
+                  onPrimary: Colors.white, // foreground
+                ),
+                child: Text('Login'),
+                onPressed: () {
+                  // Ação do login
+                },
+              ),
+            ),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Checkbox(
+                    value: this.isRememberMe,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        this.isRememberMe = value!;
+                      });
+                    },
+                  ),
+                  Text('Lembrar-me'),
+                ],
+              ),
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue, // background
+                  onPrimary: Colors.white, // foreground
+                ),
+                child: Text('Criar Conta'),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/signup');
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SignUpScreen extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool passwordVisible = false;
+  bool isRememberMe = false;
+  String gender = 'None';
+  bool isEmailNotification = false;
+  bool isPhoneNotification = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Cadastro'),
+      ),
+      body: ListView(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: TextField(
+              controller: nameController,
+              keyboardType: TextInputType.name,
+              maxLength: 20,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Nome',
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: TextField(
+              controller: dobController,
+              keyboardType: TextInputType.datetime,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Data de nascimento (DD/MM/AAAA)',
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              maxLength: 10,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Telefone',
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: TextField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Email',
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: TextField(
+              controller: passwordController,
+              obscureText: !this.passwordVisible,
+              maxLength: 15,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Senha',
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    passwordVisible = !passwordVisible;
+                  },
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Text('Gênero: '),
+                DropdownButton<String>(
+                  value: gender,
+                  items: <String>['Masculino', 'Feminino', 'None'].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    gender = newValue!;
+                  },
+                ),
+              ],
+            ),
+          ),
+          SwitchListTile(
+            title: Text('Notificações por Email'),
+            value: isEmailNotification,
+            onChanged: (bool value) {
+              isEmailNotification = value;
+            },
+          ),
+          SwitchListTile(
+            title: Text('Notificações por Telefone'),
+            value: isPhoneNotification,
+            onChanged: (bool value) {
+              isPhoneNotification = value;
+            },
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.blue, // background
+              onPrimary: Colors.white, // foreground
+            ),
+            child: Text('Cadastrar'),
+            onPressed: () {
+              // Implementar ação de cadastro
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
